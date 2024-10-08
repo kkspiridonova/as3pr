@@ -1,12 +1,17 @@
 package com.example.krestnol;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -14,13 +19,33 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    Button button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonNew;
-    String krest, nol;
-    TextView textView;
+    Button button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonNew, playWithFriend, playWithPC;
+    String krest, nol, schet;
+    TextView textView, FirstPlayer, SecondPlayer, PC;
+    int pointsFirstPlayer, pointsSecondPlayer, pointsPC;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    SharedPreferences themeSettings;
+    SharedPreferences.Editor settingsEditor;
+    ImageButton imageTheme;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        themeSettings = getSharedPreferences("SETTINGS", MODE_PRIVATE);
+        if (!themeSettings.contains("MODE_NIGHT_ON")) {
+            settingsEditor = themeSettings.edit();
+            settingsEditor.putBoolean("MODE_NIGHT_ON", false);
+            settingsEditor.apply();
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            Toast.makeText(this, "Запуск", Toast.LENGTH_SHORT).show();
+        } else {
+            setCurrentTheme();
+        }
         setContentView(R.layout.activity_main);
+        imageTheme = findViewById(R.id.Ing);
+        updateImageButton();
+
 
 
 
@@ -36,10 +61,67 @@ public class MainActivity extends AppCompatActivity {
         button8 = findViewById(R.id.button8);
         button9 = findViewById(R.id.button9);
         buttonNew = findViewById(R.id.buttonNew);
+
+        FirstPlayer = findViewById(R.id.FirstPlayer);
+        SecondPlayer = findViewById(R.id.SecondPlayer);
+        PC = findViewById(R.id.Pc);
+
+        sharedPreferences = this.getSharedPreferences("krestikinoliki", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        pointsFirstPlayer = sharedPreferences.getInt("pointsFirstPlayer", 0);
+        FirstPlayer.setText(""+pointsFirstPlayer);
+        pointsSecondPlayer = sharedPreferences.getInt("pointsSecondPlayer", 0);
+        SecondPlayer.setText(""+pointsSecondPlayer);
+        pointsPC = sharedPreferences.getInt("pointsPC", 0);
+        PC.setText(""+pointsPC);
+
         krest = "X";
         nol = "O";
         textView.setText("");
 
+        imageTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (themeSettings.getBoolean("MODE_NIGHT_ON", false))
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    settingsEditor = themeSettings.edit();
+                    settingsEditor.putBoolean("MODE_NIGHT_ON", false);
+                    settingsEditor.apply();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Toast.makeText(MainActivity.this, "Темная тема отключена", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    settingsEditor = themeSettings.edit();
+                    settingsEditor.putBoolean("MODE_NIGHT_ON", true);
+                    settingsEditor.apply();
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Toast.makeText(MainActivity.this, "Темная тема включена", Toast.LENGTH_SHORT).show();
+                }
+                updateImageButton();
+            }
+        });
+
+    }
+
+    private void updateImageButton() {
+        if (themeSettings.getBoolean("MODE_NIGHT_ON", false)){
+            imageTheme.setImageResource(R.drawable.icon2);
+        } else{
+            imageTheme.setImageResource((R.drawable.icon));
+        }
+    }
+
+    private void setCurrentTheme() {
+        if(themeSettings.getBoolean("MODE_NIGHT_ON",false )){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        }
 
     }
 
@@ -157,39 +239,127 @@ public class MainActivity extends AppCompatActivity {
     public void isPlayerWiner(){
         if(button1.getText() == krest && button2.getText() == krest &&button3.getText() == krest){
          textView.setText("Победа!");
+         pointsFirstPlayer++;
+         FirstPlayer.setText(""+pointsFirstPlayer);
+         editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+         editor.apply();
         }
         else if(button1.getText() == krest && button5.getText() == krest &&button9.getText() == krest){
-            textView.setText("Победа!");}
+            textView.setText("Победа!");
+            pointsFirstPlayer++;
+            FirstPlayer.setText(""+pointsFirstPlayer);
+            editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+            editor.apply();
+        }
         else if(button1.getText() == krest && button4.getText() == krest &&button7.getText() == krest){
-            textView.setText("Победа!");}
+            textView.setText("Победа!");
+            pointsFirstPlayer++;
+            FirstPlayer.setText(""+pointsFirstPlayer);
+            editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+            editor.apply();
+        }
         else if(button2.getText() == krest && button5.getText() == krest &&button8.getText() == krest){
-            textView.setText("Победа!");}
+            textView.setText("Победа!");
+            pointsFirstPlayer++;
+            FirstPlayer.setText(""+pointsFirstPlayer);
+            editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+            editor.apply();
+        }
         else if(button3.getText() == krest && button6.getText() == krest &&button9.getText() == krest){
-            textView.setText("Победа!");}
+            textView.setText("Победа!");
+            pointsFirstPlayer++;
+            FirstPlayer.setText(""+pointsFirstPlayer);
+            editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+            editor.apply();
+        }
         else if(button4.getText() == krest && button5.getText() == krest &&button6.getText() == krest){
-            textView.setText("Победа!");}
+            textView.setText("Победа!");
+            pointsFirstPlayer++;
+            FirstPlayer.setText(""+pointsFirstPlayer);
+            editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+            editor.apply();
+        }
         else if(button7.getText() == krest && button8.getText() == krest &&button9.getText() == krest){
-            textView.setText("Победа!");}
+            textView.setText("Победа!");
+            pointsFirstPlayer++;
+            FirstPlayer.setText(""+pointsFirstPlayer);
+            editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+            editor.apply();
+        }
         else if(button3.getText() == krest && button5.getText() == krest &&button7.getText() == krest){
-            textView.setText("Победа!");}
+            textView.setText("Победа!");
+            pointsFirstPlayer++;
+            FirstPlayer.setText(""+pointsFirstPlayer);
+            editor.putInt("pointsFirstPlayer",pointsFirstPlayer);
+            editor.apply();
+        }
+        else if(button1.getText() != "" && button2.getText() != "" && button3.getText() != "" &&
+        button4.getText() != "" && button5.getText() != "" && button6.getText() != "" &&
+        button7.getText() != "" && button8.getText() != "" && button9.getText() != ""){
+            textView.setText("Ничья!");
+            pointsSecondPlayer++;
+            SecondPlayer.setText(""+pointsSecondPlayer);
+            editor.putInt("pointsSecondPlayer",pointsSecondPlayer);
+            editor.apply();
+        }
     }
     public void isPCWiner(){
         if(button1.getText() == nol && button2.getText() == nol &&button3.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
         else if(button1.getText() == nol && button5.getText() == nol &&button9.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
         else if(button1.getText() == nol && button4.getText() == nol &&button7.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
         else if(button2.getText() == nol && button5.getText() == nol &&button8.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
         else if(button3.getText() == nol && button6.getText() == nol &&button9.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
         else if(button4.getText() == nol && button5.getText() == nol &&button6.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
         else if(button7.getText() == nol && button8.getText() == nol &&button9.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
         else if(button3.getText() == nol && button5.getText() == nol &&button7.getText() == nol){
-            textView.setText("Проигрыш!");}
+            textView.setText("Проигрыш!");
+            pointsPC++;
+            PC.setText(""+pointsPC);
+            editor.putInt("pointsPC",pointsPC);
+            editor.apply();
+        }
     }
 
 
@@ -299,4 +469,6 @@ public class MainActivity extends AppCompatActivity {
         button9.setText("");
         textView.setText("");
     }
+
+
 }
